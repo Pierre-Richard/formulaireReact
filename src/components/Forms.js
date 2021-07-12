@@ -10,7 +10,7 @@ class Forms extends Component{
             prenom:"",
             password:"",
             checkbox: false,
-            error: false
+            error: {status: false, message: ""}
         }
         this.handleChange = this.hanldeChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -23,6 +23,8 @@ class Forms extends Component{
                 [name]: value
             })
 
+           
+
         // switch (name) {
         //     case 'nom':
         //         console.log('c le nom');
@@ -32,9 +34,11 @@ class Forms extends Component{
         //         break;
         // }
         if(value.match(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])([a-zA-Z0-9]{8})$/) && name === "password"){
+            this.setState({error:false, message: "" })
             console.log('Mot de passe valide');
-        } else if(value.length > 8 && name === "password" ){
-            console.log('le mot de passe doit contenir: Contain at least 8 characters')
+        } else if(value.length < 8 && name === "password"){
+            this.setState({error:{status: true, message: 'le mot de passe doit contenir: Contain at least 8 characters'} })
+            // console.log( + this.state.error)
         }
         }
         handleSubmit(e){
@@ -53,7 +57,6 @@ class Forms extends Component{
                     <label>
                         Nom :
                         <input type="text" name="nom" value={this.state.nom} onChange={this.handleChange} />
-                        
                     </label>
                     <br/>
                     <label>
@@ -64,7 +67,7 @@ class Forms extends Component{
                     <label>
                         Password :
                         <input type="password" name="password" value={this.state.password} onChange={this.handleChange} />
-                        <div>{this.state.error ? "pas d erreur" : "erreur"}</div>
+                        <div>{this.state.error.status &&  this.state.error.message}</div>
                     </label>
                     <br/>
                     <label>
