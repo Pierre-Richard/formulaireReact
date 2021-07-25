@@ -10,6 +10,7 @@ class Forms extends Component{
             prenom:"",
             password:"",
             checkbox: false,
+            reponse: "",
             error: {status: false, message: ""}
         }
         this.handleChange = this.hanldeChange.bind(this);
@@ -23,30 +24,40 @@ class Forms extends Component{
                 [name]: value
             })
 
-           
+        if(value.length > 5 && name === "nom"){
+            this.setState({error: {status: false, message: "" }})
+            // console.log(this.state.nom);
+        }else if (value.length < 5 && name === "nom") {
+            this.setState({error:{status:true, message: 'le nom doit contenir au minimun 5 lettres'}});
+        }
 
-        // switch (name) {
-        //     case 'nom':
-        //         console.log('c le nom');
-        //         break;
+        if(value.length > 8 && name === "prenom"){
+            this.setState({error: {status: false, message: "" }})
+            // console.log(this.state.nom);
+        }else if (value.length < 8 && name === "prenom") {
+            this.setState({error:{status:true, message: 'le prenom doit contenir au minimun 8 lettres'}});
+        }
         
-        //     default:
-        //         break;
-        // }
         if(value.match(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])([a-zA-Z0-9]{8})$/) && name === "password"){
-            this.setState({error:false, message: "" })
+            this.setState({error: {status: false, message: "" }})
             console.log('Mot de passe valide');
         } else if(value.length < 8 && name === "password"){
-            this.setState({error:{status: true, message: 'le mot de passe doit contenir: Contain at least 8 characters'} })
+            this.setState({error:{status: true, message: 'le mot de passe doit contenir: Contain at least 8 characters dont une Majuscule et un chiffre'} });
             // console.log( + this.state.error)
         }
+
         }
         handleSubmit(e){
-            e.preventDefault()
-            const data = JSON.stringify(this.state)
-            console.log(data);
+            e.preventDefault();
+            console.log(this.state.error.status)
+            if(this.state.error.status === false){
+                this.setState({reponse: "tout est ok"});
+            }
+            // const data = JSON.stringify(this.state)
+            // console.log(data);
         }
 
+        
     
     
     render(){
@@ -72,10 +83,11 @@ class Forms extends Component{
                     <br/>
                     <label>
                         Checkbox :
-                        <input type="checkbox" name="checkbox" value={this.state.checkbox} onChange={this.handleChange} />
+                        <input type="checkbox" name="checkbox" checked={this.state.checkbox} onChange={this.handleChange} />
                     </label>
                     <br/>
-                    <input type="submit" value="Envoyer" />
+                    <button>  Envoyer </button>
+                    <div>{this.state.error.message}</div>
                 </form>
                 {JSON.stringify(this.state)}
             </div>
